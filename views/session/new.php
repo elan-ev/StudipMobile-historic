@@ -22,8 +22,8 @@
       <div data-role="content" id="one">
         <form action="<?= $controller->url_for('session/create') ?>" method="post">
           <div data-role="fieldcontain">
-            <label for="name">Nutzername:</label>
-            <input type="text" name="name" id="name" value="">
+            <label for="username">Nutzername:</label>
+            <input type="text" name="username" id="username" value="">
           </div>
           <div data-role="fieldcontain">
             <label for="password">Passwort:</label>
