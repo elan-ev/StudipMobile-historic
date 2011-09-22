@@ -1,36 +1,16 @@
 <?php
 
-class SessionController extends Trails_Controller
+require "StudipMobileController.php";
+
+class SessionController extends StudipMobileController
 {
-    function before_filter(&$action, &$args)
+
+    function before($action)
     {
-        $this->plugin_path = URLHelper::getURL($this->dispatcher->plugin->getPluginPath());
-    }
-/*
-  def new
-    @user_session = UserSession.new
-  end
+        if ($action !== "destroy")
+            $this->requireUser();
 
-  def create
-    @user_session = UserSession.new(params[:user_session])
-    if @user_session.save
-      flash[:notice] = "Login successful!"
-      redirect_back_or_default "/"
-    else
-      render :action => :new
-    end
-  end
-
-  def destroy
-    current_user_session.destroy
-    flash[:notice] = "Logout successful!"
-    redirect_back_or_default "/"
-  end
-*/
-
-    function index_action()
-    {
-        $this->redirect('session/new');
+        $this->set_layout("layouts/single_page");
     }
 
     function new_action()
@@ -39,23 +19,62 @@ class SessionController extends Trails_Controller
 
     function create_action()
     {
-        $username = $_SERVER['PHP_AUTH_USER'];
-        $password = $_SERVER['PHP_AUTH_PW'];
+
+        $username = Request::get("username");
+        $password = Request::get("password");
 
         if (isset($username) && isset($password)) {
             $result = StudipAuthAbstract::CheckAuthentication($username, $password);
         }
 
-        if (isset($result) && $result['uid'] !== false) {
-            $user_id = get_userid($username);
-        } else {
-            header('WWW-Authenticate: Basic realm="Stud.IP Login"');
-            header('HTTP/1.1 401 Unauthorized');
-
-            $exception = new AccessDeniedException('invalid password');
-            echo $template_factory->render('access_denied_exception', compact('exception'));
+        if (!isset($result) || $result['uid'] === false) {
+            $this->flash["notice"] = "login unsuccessful!";
+            $this->redirect("session/new");
+            return;
         }
 
-        return $user_id;
+
+        $user_id = get_userid($username);
+
+        if (isset($user_id)) {
+            $this->start_session($user_id);
+        }
+
+        $this->flash["notice"] = "login successful!";
+        $this->redirect("activities");
+    }
+
+    function destroy_action()
+    {
+        # TODO dummy implementation just for testing
+        $this->content_for_layout = "not implemented";
+        $this->render_template("layouts/single_page");
+        $this->set_layout(null);
+    }
+
+    protected function start_session($user_id)
+    {
+        global $perm, $user, $auth, $sess, $forced_language, $_language;
+
+
+        $user = new Seminar_User();
+        $user->start($user_id);
+
+        foreach (array(
+                     "uid" => $user_id,
+                     "perm" => $user->perms,
+                     "uname" => $user->username,
+                     "auth_plugin" => $user->auth_plugin,
+                     "exp" => time() + 60 * 15,
+                     "refresh" => time()
+                 ) as $k => $v) {
+            $auth->auth[$k] = $v;
+        }
+
+        $auth->nobody = false;
+
+
+        $sess->regenerate_session_id(array('auth', 'forced_language','_language'));
+        $sess->freeze();
     }
 }
