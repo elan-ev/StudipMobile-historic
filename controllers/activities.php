@@ -1,6 +1,7 @@
 <?php
 
 require "StudipMobileController.php";
+require dirname(__FILE__) . "/../models/activity.php";
 
 class ActivitiesController extends StudipMobileController
 {
@@ -16,5 +17,13 @@ class ActivitiesController extends StudipMobileController
     function index_action()
     {
         # just render the template
+    }
+
+    function json_action()
+    {
+        # TODO besser mit trails
+        header('Content-Type: application/json');
+
+        $this->render_text(json_encode(Activity::findAll($this->currentUser()->id)));
     }
 }
