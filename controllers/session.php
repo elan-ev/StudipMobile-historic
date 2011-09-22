@@ -7,7 +7,7 @@ class SessionController extends StudipMobileController
 
     function before($action)
     {
-        if ($action !== "destroy")
+        if ($action === "destroy")
             $this->requireUser();
 
         $this->set_layout("layouts/single_page");
