@@ -1,10 +1,32 @@
-console.log($('#activities-index'));
 $('#activities-index').live("pagecreate", function() {
 
-    console.log("show");
-    $.mobile.showPageLoadingMsg();
+    // seems that the page loading msg isn't there yet,
+    // thus defer the dynamic list fetching
+    setTimeout(function() {
+        $.mobile.showPageLoadingMsg();
 
-    var activities;
+        // for testing the page loading msg
+        setTimeout(function () {
+            list();
+            $.mobile.hidePageLoadingMsg();
+        }, 200);
+    }, 0);
+
+    function list() {
+        var url = STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/studipmobile/activities/json";
+        var template = $("#template-timeline").text().trim();
+
+        $.getJSON(url, function(activities) {
+            $.each(activities, function (i, activity) {
+                activity.readableTime = readableDate(activity.updated);
+            });
+
+            $("#activities")
+                .empty()
+                .append($.mustache(template, {activities: activities}))
+                .listview("refresh");
+        });
+    }
 
     function readableDate(unix) {
         var date = new Date(unix * 1000);
@@ -12,24 +34,4 @@ $('#activities-index').live("pagecreate", function() {
             ? date.toString('HH:mm')
             : date.toString('dd.MM. HH:mm');
     }
-
-    function list() {
-        var ul = $("#activities").empty();
-        var url = STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/studipmobile/activities/json";
-        var template = $("#template-timeline").text().trim();
-
-        console.log(url);
-        $.getJSON(url, function(json) {
-            $.each(json, function (i, activity) {
-                activity.readableTime = readableDate(activity.updated);
-            });
-            activities = json;
-
-            ul.append($.mustache(template, {activities: activities})).listview("refresh");
-        });
-    }
-
-    list();
-
-
 });
