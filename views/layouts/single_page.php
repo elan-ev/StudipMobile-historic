@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stud.IP Mobile</title>
     <link rel="stylesheet" href="<?= $plugin_path ?>/public/vendor/jquery.mobile/jquery.mobile-1.0b3.min.css" />
+    <link rel="stylesheet" href="<?= $plugin_path ?>/public/stylesheets/mobile.css" />
     <script src="<?= $plugin_path ?>/public/vendor/jquery/jquery-1.6.3.min.js"></script>
     <script src="<?= $plugin_path ?>/public/vendor/jquery.mobile/jquery.mobile-1.0b3.min.js"></script>
 
