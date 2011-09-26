@@ -28,7 +28,9 @@
     <div data-role="page" id="<?= $page_id ?: '' ?>">
 
       <div data-role="header">
+        <a href="quickdial" data-icon="grid"><?=_("Menu")?></a>
         <h1><?= $page_title ?: 'Stud.IP' ?></h1>
+        <a href="<?= $controller->url_for("session/destroy") ?>" data-icon="delete"><?=_("Abmelden")?></a>
       </div><!-- /header -->
       
       <div data-role="content">
