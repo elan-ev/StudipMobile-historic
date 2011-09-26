@@ -1,11 +1,12 @@
 <?php
+namespace Studip\Mobile;
 
 class Activity {
 
     # TODO args?
-    static function findAll($user_id, $range = null, $days = 365, $category = null)
+    static function findAllByUser($user_id, $range = null, $days = 365, $category = null)
     {
-        $days = Request::int('days', 365);
+        $days = \Request::int('days', 365);
 
         $items = self::get_activities($user_id, $range, $days);
         $items = self::filter_utf8($items);
@@ -32,7 +33,7 @@ class Activity {
      */
     private function get_activities($user_id, $range, $days)
     {
-        $db = DBManager::get();
+        $db = \DBManager::get();
         $now = time();
         $chdate = $now - 24 * 60 * 60 * $days;
         $items = array();
@@ -69,7 +70,7 @@ class Activity {
                 'title' => $row['name'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('forum.php#anker',
+                'link' => \URLHelper::getLink('forum.php#anker',
                     array('cid' => $row['Seminar_id'], 'view' => 'tree', 'open' => $row['topic_id'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat im Forum der Veranstaltung "%s" den Beitrag "%s" geschrieben.',
@@ -94,7 +95,7 @@ class Activity {
                 'title' => $row['name'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('forum.php#anker',
+                'link' => \URLHelper::getLink('forum.php#anker',
                     array('cid' => $row['Institut_id'], 'view' => 'tree', 'open' => $row['topic_id'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat im Forum der Einrichtung "%s" den Beitrag "%s" geschrieben.',
@@ -116,7 +117,7 @@ class Activity {
         $result = $db->query($sql);
 
         foreach ($result as $row) {
-            $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $row['seminar_id']));
+            $folder_tree = \TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $row['seminar_id']));
 
             if ($folder_tree->isDownloadFolder($row['range_id'], $user_id)) {
                 $items[] = array(
@@ -124,7 +125,7 @@ class Activity {
                     'title' => $row['name'],
                     'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                     'author_id' => $row['author_id'],
-                    'link' => URLHelper::getLink('folder.php#anker',
+                    'link' => \URLHelper::getLink('folder.php#anker',
                         array('cid' => $row['seminar_id'], 'cmd' => 'tree', 'open' => $row['dokument_id'])),
                     'updated' => $row['chdate'],
                     'summary' => sprintf('%s %s hat im Dateibereich der Veranstaltung "%s" die Datei "%s" hochgeladen.',
@@ -145,7 +146,7 @@ class Activity {
         $result = $db->query($sql);
 
         foreach ($result as $row) {
-            $folder_tree = TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $row['seminar_id']));
+            $folder_tree = \TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $row['seminar_id']));
 
             if ($folder_tree->isDownloadFolder($row['range_id'], $user_id)) {
                 $items[] = array(
@@ -153,7 +154,7 @@ class Activity {
                     'title' => $row['name'],
                     'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                     'author_id' => $row['author_id'],
-                    'link' => URLHelper::getLink('folder.php#anker',
+                    'link' => \URLHelper::getLink('folder.php#anker',
                         array('cid' => $row['Institut_id'], 'cmd' => 'tree', 'open' => $row['dokument_id'])),
                     'updated' => $row['chdate'],
                     'summary' => sprintf('%s %s hat im Dateibereich der Einrichtung "%s" die Datei "%s" hochgeladen.',
@@ -181,7 +182,7 @@ class Activity {
                 'title' => $row['keyword'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('wiki.php',
+                'link' => \URLHelper::getLink('wiki.php',
                     array('cid' => $row['range_id'], 'keyword' => $row['keyword'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat im Wiki der Veranstaltung "%s" die Seite "%s" geändert.',
@@ -206,7 +207,7 @@ class Activity {
                 'title' => $row['keyword'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('wiki.php',
+                'link' => \URLHelper::getLink('wiki.php',
                     array('cid' => $row['range_id'], 'keyword' => $row['keyword'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat im Wiki der Einrichtung "%s" die Seite "%s" geändert.',
@@ -233,7 +234,7 @@ class Activity {
                 'title' => $row['tab_name'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('scm.php',
+                'link' => \URLHelper::getLink('scm.php',
                     array('cid' => $row['range_id'], 'show_scm' => $row['scm_id'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Informationsseite "%s" geändert.',
@@ -258,7 +259,7 @@ class Activity {
                 'title' => $row['tab_name'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('scm.php',
+                'link' => \URLHelper::getLink('scm.php',
                     array('cid' => $row['range_id'], 'show_scm' => $row['scm_id'])),
                 'updated' => $row['chdate'],
                 'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Informationsseite "%s" geändert.',
@@ -285,7 +286,7 @@ class Activity {
                     'title' => $row['topic'],
                     'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                     'author_id' => $row['author_id'],
-                    'link' => URLHelper::getLink('about.php#anker',
+                    'link' => \URLHelper::getLink('about.php#anker',
                         array('username' => $row['username'], 'nopen' => $row['news_id'])),
                     'updated' => max($row['date'], $row['chdate']),
                     'summary' => sprintf('%s %s hat die persönliche Ankündigung "%s" eingestellt.',
@@ -312,7 +313,7 @@ class Activity {
                 'title' => $row['topic'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('seminar_main.php#anker',
+                'link' => \URLHelper::getLink('seminar_main.php#anker',
                     array('cid' => $row['range_id'], 'nopen' => $row['news_id'])),
                 'updated' => max($row['date'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Ankündigung "%s" eingestellt.',
@@ -338,7 +339,7 @@ class Activity {
                 'title' => $row['topic'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('institut_main.php#anker',
+                'link' => \URLHelper::getLink('institut_main.php#anker',
                     array('cid' => $row['range_id'], 'nopen' => $row['news_id'])),
                 'updated' => max($row['date'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Ankündigung "%s" eingestellt.',
@@ -364,7 +365,7 @@ class Activity {
                     'title' => $row['title'],
                     'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                     'author_id' => $row['author_id'],
-                    'link' => URLHelper::getLink('about.php#openvote',
+                    'link' => \URLHelper::getLink('about.php#openvote',
                         array('username' => $row['username'], 'voteopenID' => $row['vote_id'])),
                     'updated' => max($row['startdate'], $row['chdate']),
                     'summary' => sprintf('%s %s hat die persönliche Umfrage "%s" gestartet.',
@@ -390,7 +391,7 @@ class Activity {
                 'title' => $row['title'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('seminar_main.php#openvote',
+                'link' => \URLHelper::getLink('seminar_main.php#openvote',
                     array('cid' => $row['range_id'], 'voteopenID' => $row['vote_id'])),
                 'updated' => max($row['startdate'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Umfrage "%s" gestartet.',
@@ -415,7 +416,7 @@ class Activity {
                 'title' => $row['title'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('institut_main.php#openvote',
+                'link' => \URLHelper::getLink('institut_main.php#openvote',
                     array('cid' => $row['range_id'], 'voteopenID' => $row['vote_id'])),
                 'updated' => max($row['startdate'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Umfrage "%s" gestartet.',
@@ -442,7 +443,7 @@ class Activity {
                     'title' => $row['title'],
                     'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                     'author_id' => $row['author_id'],
-                    'link' => URLHelper::getLink('about.php#openvote',
+                    'link' => \URLHelper::getLink('about.php#openvote',
                         array('username' => $row['username'], 'voteopenID' => $row['eval_id'])),
                     'updated' => max($row['startdate'], $row['chdate']),
                     'summary' => sprintf('%s %s hat die persönliche Evaluation "%s" gestartet.',
@@ -469,7 +470,7 @@ class Activity {
                 'title' => $row['title'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('seminar_main.php#openvote',
+                'link' => \URLHelper::getLink('seminar_main.php#openvote',
                     array('cid' => $row['range_id'], 'voteopenID' => $row['eval_id'])),
                 'updated' => max($row['startdate'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Evaluation "%s" gestartet.',
@@ -495,7 +496,7 @@ class Activity {
                 'title' => $row['title'],
                 'author' => $row['Vorname'] . ' ' . $row['Nachname'],
                 'author_id' => $row['author_id'],
-                'link' => URLHelper::getLink('institut_main.php#openvote',
+                'link' => \URLHelper::getLink('institut_main.php#openvote',
                     array('cid' => $row['range_id'], 'voteopenID' => $row['eval_id'])),
                 'updated' => max($row['startdate'], $row['chdate']),
                 'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Evaluation "%s" gestartet.',
