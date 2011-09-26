@@ -12,7 +12,7 @@ $page_title = _("Stud.IP - Hauptmen&uuml;");
             <a href="<?= $controller->url_for("courses") ?>" data-role="button" data-icon="studip-courses" data-iconpos="top">Courses</a>
         </div>
 	<div class="ui-block-c">
-            <a href="<?= $controller->url_for("courses") ?>" data-role="button" data-icon="studip-dates" data-iconpos="top">Dates</a>
+            <a href="<?= $controller->url_for("dates") ?>" data-role="button" data-icon="studip-dates" data-iconpos="top">Dates</a>
         </div>
 	<div class="ui-block-a">
             <a href="index.html" data-role="button" data-icon="home" data-iconpos="top">Option 4</a>
