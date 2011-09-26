@@ -14,8 +14,6 @@ class Dates {
         return $items;
     }
 
-
-
     function filter_utf8($items)
     {
         foreach ($items as &$item) {
@@ -38,13 +36,13 @@ class Dates {
         $start_date = time() - 3600;
         $end_date   = strtotime('+2 years'); // #TODO: use passed variables
 
-        /*
         if (get_config('CALENDAR_ENABLE')) {
-            $list = new DbCalendarEventList(new SingleCalendar($user->id, Calendar::PERMISSION_OWN),
-                $start_date, $end_date, true, Calendar::getBindSeminare());
+            $list = new DbCalendarEventList(new SingleCalendar($user_id, Calendar::PERMISSION_OWN),
+                $start_date, $end_date, true, Calendar::getBindSeminare($user_id));
 
             if ($list->existEvent()) {
                 while($date = $list->nextEvent()) {
+                    $singledate = SingleDate::getInstance($date->getId());
                     $items[] = array(
                         'id'      => $date->getId(),
                         'start'   => $date->getStart(),
@@ -52,11 +50,13 @@ class Dates {
                         'title'   => $date->getTitle(),
                         'content' => $date->getDescription(),
                         'semname' =>  (strtolower(get_class($date)) == 'seminarcalendarevent'
-                            ? $termin->getSemName() : false)
+                            ? $termin->getSemName() : false),
+                        'room'    => $singledate->getRoom()
+
                     );
                 }
             }
-        } else {*/
+        } else {
             $stmt = DBManager::get()->prepare($query = "SELECT t.date as start, "
                 . "t.end_time as end, t.termin_id as id, "
                 . "th.title as title, th.description as content, "
@@ -73,7 +73,7 @@ class Dates {
 
             // echo str_replace('?', "'$user_id'", $query);die;
             $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //}
+        }
 
         return $items;
     }

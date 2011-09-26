@@ -4,9 +4,13 @@ $page_title = "Stud.IP - Meine Termine";
 $page_id = "dates-index";
 ?>
 
+<? if (empty($dates)) : ?>
+<h1><?= _('Keine Termine vorhanden!') ?></h1>
+<? else : ?>
 <ul id="dates" data-role="listview" data-filter="true">
     <? foreach ($dates as $date) : ?>
-    <li class="dates" data-dates="<?= $date['id'] ?>">
+    <li class="dates ui-btn" data-dates="<?= $date['id'] ?>">
+        <a href="#">
         <?= Assets::img('icons/16/blue/schedule.png', array('class' => 'ui-li-icon')) ?>
 
         <?= strftime('%x', $date['start']) ?>,
@@ -14,16 +18,18 @@ $page_id = "dates-index";
             <?= date('H:i', $date['end']) ?>
 
         <? if ($date['room']) : ?>
-        - <?= $date['room'] ?>
+        - <?= htmlReady($date['room']) ?>
         <? endif ?>
         <br>
 
         <? if ($date['semname']) : ?>
-        <strong><?= $date['semname'] ?></strong><br>
-        <?= $date['title'] ?><br>
+        <strong><?= htmlReady($date['semname']) ?></strong><br>
+        <?= htmlReady($date['title']) ?>
         <? else : ?>
-        <strong><?= $date['title'] ?></strong><br>
+        <strong><?= htmlReady($date['title']) ?></strong>
         <? endif ?>
+        </a>
     </li>
     <? endforeach ?>
 </ul>
+<? endif ?>
