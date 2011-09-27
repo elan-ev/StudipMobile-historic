@@ -1,6 +1,6 @@
 <?
 $this->set_layout("layouts/single_page");
-$page_title = _("Stud.IP - Hauptmen&uuml;");
+$page_title = _("Stud.IP - Hauptmenü");
 ?>
 
 <!-- Just gimme a 3x3 grid -->

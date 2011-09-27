@@ -4,11 +4,11 @@ class StudipMobileController extends Trails_Controller
 {
 
     /**
-     * ApplikationsÃ¼bergreifender before_filter mit Trick:
+     * Applikationsübergreifender before_filter mit Trick:
      *
      * Controller-Methoden, die mit "before" anfangen werden in
-     * Quellcode-Reihenfolge als weitere before_filter ausgefÃ¼hrt.
-     * Geben diese FALSE zurÃ¼ck, bricht Trails genau wie beim normalen
+     * Quellcode-Reihenfolge als weitere before_filter ausgeführt.
+     * Geben diese FALSE zurück, bricht Trails genau wie beim normalen
      * before_filter ab.
      */
     function before_filter(&$action, &$args)
@@ -51,5 +51,26 @@ class StudipMobileController extends Trails_Controller
             $this->redirect("session/new");
             return FALSE;
         }
+    }
+
+    function render_json($data)
+    {
+        # TODO besser mit trails
+        header('Content-Type: application/json');
+
+        $this->render_text(json_encode($this->filter_utf8($data)));
+    }
+
+
+    function filter_utf8($items)
+    {
+        foreach ($items as &$item) {
+            foreach ($item as &$value) {
+                if (is_string($value)) {
+                    $value = utf8_encode($value);
+                }
+            }
+        }
+        return $items;
     }
 }

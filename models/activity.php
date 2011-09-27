@@ -8,24 +8,7 @@ class Activity {
     {
         $days = \Request::int('days', 365);
 
-        $items = self::get_activities($user_id, $range, $days);
-        $items = self::filter_utf8($items);
-
-        return $items;
-    }
-
-
-
-    function filter_utf8($items)
-    {
-        foreach ($items as &$item) {
-            foreach ($item as &$value) {
-                if (is_string($value)) {
-                    $value = utf8_encode($value);
-                }
-            }
-        }
-        return $items;
+        return self::get_activities($user_id, $range, $days);
     }
 
     /**
@@ -185,7 +168,7 @@ class Activity {
                 'link' => \URLHelper::getLink('wiki.php',
                     array('cid' => $row['range_id'], 'keyword' => $row['keyword'])),
                 'updated' => $row['chdate'],
-                'summary' => sprintf('%s %s hat im Wiki der Veranstaltung "%s" die Seite "%s" geÃ¤ndert.',
+                'summary' => sprintf('%s %s hat im Wiki der Veranstaltung "%s" die Seite "%s" geändert.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['keyword']),
                 'content' => $row['body'],
                 'category' => 'wiki'
@@ -210,7 +193,7 @@ class Activity {
                 'link' => \URLHelper::getLink('wiki.php',
                     array('cid' => $row['range_id'], 'keyword' => $row['keyword'])),
                 'updated' => $row['chdate'],
-                'summary' => sprintf('%s %s hat im Wiki der Einrichtung "%s" die Seite "%s" geÃ¤ndert.',
+                'summary' => sprintf('%s %s hat im Wiki der Einrichtung "%s" die Seite "%s" geändert.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['keyword']),
                 'content' => $row['body'],
                 'category' => 'wiki'
@@ -237,7 +220,7 @@ class Activity {
                 'link' => \URLHelper::getLink('scm.php',
                     array('cid' => $row['range_id'], 'show_scm' => $row['scm_id'])),
                 'updated' => $row['chdate'],
-                'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Informationsseite "%s" geÃ¤ndert.',
+                'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Informationsseite "%s" geändert.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['tab_name']),
                 'content' => $row['content'],
                 'category' => 'info'
@@ -262,7 +245,7 @@ class Activity {
                 'link' => \URLHelper::getLink('scm.php',
                     array('cid' => $row['range_id'], 'show_scm' => $row['scm_id'])),
                 'updated' => $row['chdate'],
-                'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Informationsseite "%s" geÃ¤ndert.',
+                'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Informationsseite "%s" geändert.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['tab_name']),
                 'content' => $row['content'],
                 'category' => 'info'
@@ -289,7 +272,7 @@ class Activity {
                     'link' => \URLHelper::getLink('about.php#anker',
                         array('username' => $row['username'], 'nopen' => $row['news_id'])),
                     'updated' => max($row['date'], $row['chdate']),
-                    'summary' => sprintf('%s %s hat die persÃ¶nliche AnkÃ¼ndigung "%s" eingestellt.',
+                    'summary' => sprintf('%s %s hat die persönliche Ankündigung "%s" eingestellt.',
                         $row['Vorname'], $row['Nachname'], $row['topic']),
                     'content' => $row['body'],
                     'category' => 'news'
@@ -316,7 +299,7 @@ class Activity {
                 'link' => \URLHelper::getLink('seminar_main.php#anker',
                     array('cid' => $row['range_id'], 'nopen' => $row['news_id'])),
                 'updated' => max($row['date'], $row['chdate']),
-                'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die AnkÃ¼ndigung "%s" eingestellt.',
+                'summary' => sprintf('%s %s hat in der Veranstaltung "%s" die Ankündigung "%s" eingestellt.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['topic']),
                 'content' => $row['body'],
                 'category' => 'news'
@@ -342,7 +325,7 @@ class Activity {
                 'link' => \URLHelper::getLink('institut_main.php#anker',
                     array('cid' => $row['range_id'], 'nopen' => $row['news_id'])),
                 'updated' => max($row['date'], $row['chdate']),
-                'summary' => sprintf('%s %s hat in der Einrichtung "%s" die AnkÃ¼ndigung "%s" eingestellt.',
+                'summary' => sprintf('%s %s hat in der Einrichtung "%s" die Ankündigung "%s" eingestellt.',
                     $row['Vorname'], $row['Nachname'], $row['Name'], $row['topic']),
                 'content' => $row['body'],
                 'category' => 'news'
@@ -368,7 +351,7 @@ class Activity {
                     'link' => \URLHelper::getLink('about.php#openvote',
                         array('username' => $row['username'], 'voteopenID' => $row['vote_id'])),
                     'updated' => max($row['startdate'], $row['chdate']),
-                    'summary' => sprintf('%s %s hat die persÃ¶nliche Umfrage "%s" gestartet.',
+                    'summary' => sprintf('%s %s hat die persönliche Umfrage "%s" gestartet.',
                         $row['Vorname'], $row['Nachname'], $row['title']),
                     'content' => $row['question'],
                     'category' => 'votings'
@@ -446,7 +429,7 @@ class Activity {
                     'link' => \URLHelper::getLink('about.php#openvote',
                         array('username' => $row['username'], 'voteopenID' => $row['eval_id'])),
                     'updated' => max($row['startdate'], $row['chdate']),
-                    'summary' => sprintf('%s %s hat die persÃ¶nliche Evaluation "%s" gestartet.',
+                    'summary' => sprintf('%s %s hat die persönliche Evaluation "%s" gestartet.',
                         $row['Vorname'], $row['Nachname'], $row['title']),
                     'content' => $row['text'],
                     'category' => 'surveys'

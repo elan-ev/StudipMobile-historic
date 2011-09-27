@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <meta charset="utf-8">
+    <meta charset="windows-1252">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stud.IP Mobile</title>
     <link rel="stylesheet" href="<?= $plugin_path ?>/public/vendor/jquery.mobile/jquery.mobile-1.0b3.min.css" />

@@ -9,20 +9,7 @@ class Dates {
         $days   = Request::int('days', $days);
 
         $items = self::get_dates($user_id, $days, $future);
-        $items = self::filter_utf8($items);
 
-        return $items;
-    }
-
-    function filter_utf8($items)
-    {
-        foreach ($items as &$item) {
-            foreach ($item as &$value) {
-                if (is_string($value)) {
-                    $value = utf8_encode($value);
-                }
-            }
-        }
         return $items;
     }
 

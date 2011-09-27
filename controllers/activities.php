@@ -23,9 +23,7 @@ class ActivitiesController extends StudipMobileController
 
     function json_action()
     {
-        # TODO besser mit trails
-        header('Content-Type: application/json');
-
-        $this->render_text(json_encode(Activity::findAllByUser($this->currentUser()->id)));
+        $activities = Activity::findAllByUser($this->currentUser()->id);
+        $this->render_json($activities);
     }
 }
