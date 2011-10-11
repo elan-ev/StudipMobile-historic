@@ -18,6 +18,7 @@ class CoursesController extends StudipMobileController
 
     function index_action()
     {
+        $this->semester = \SemesterData::GetSemesterArray();
         $this->courses = Course::findAllByUser($this->currentUser()->id);
     }
 }
