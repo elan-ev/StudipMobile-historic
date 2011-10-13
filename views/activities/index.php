@@ -12,7 +12,7 @@ $page_id = "activities-index";
   <li class="activity" data-activity="{{id}}">
     <img src="<?= $controller->url_for("avatars/show/{{author_id}}") ?>" alt="{{category}}" class="ui-li-icon" style="padding-top: 20px">
     <img src="<?= $plugin_path ?>/public/images/activities/{{category}}.png" alt="{{category}}" class="ui-li-icon">
-    <h3><a href="#">{{title}}</a></h3>
+    <h3>{{title}}</h3>
     <p><strong>{{author}}</strong></p>
     <p>{{content}}</p>
     <p class="ui-li-aside"><strong>{{readableTime}}</strong></p>
