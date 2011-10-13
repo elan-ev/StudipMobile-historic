@@ -25,4 +25,24 @@ class Course {
 
         return $stmt->fetchAll();
     }
+
+    static function find($id)
+    {
+        return new Course($id);
+    }
+
+    function __construct($id)
+    {
+        $this->delegate = new \Seminar($id);
+    }
+
+    function __get($key)
+    {
+        return $this->delegate->$key;
+    }
+
+    function isAuthorized($user_id)
+    {
+        return true;
+    }
 }
