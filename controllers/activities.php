@@ -18,12 +18,6 @@ class ActivitiesController extends StudipMobileController
 
     function index_action()
     {
-        # just render the template
-    }
-
-    function json_action()
-    {
-        $activities = Activity::findAllByUser($this->currentUser()->id);
-        $this->render_json($activities);
+        $this->activities = Activity::findAllByUser($this->currentUser()->id);
     }
 }
